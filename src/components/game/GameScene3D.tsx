@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, Sky } from "@react-three/drei";
 import ClueObject3D from "./ClueObject3D";
+import MinecraftNPC from "./MinecraftNPC";
 
 interface GameScene3DProps {
   clues: any[];
@@ -108,6 +109,11 @@ const GameScene3D = ({ clues, discoveredClues, onDiscoverClue }: GameScene3DProp
             </mesh>
           );
         })}
+
+        {/* NPCs - Minecraft style characters */}
+        <MinecraftNPC position={[-4, 0, -4]} skinColor="#f4a460" shirtColor="#DC143C" pantsColor="#2F4F4F" />
+        <MinecraftNPC position={[4, 0, -4]} skinColor="#d2a679" shirtColor="#32CD32" pantsColor="#4B4B4B" />
+        <MinecraftNPC position={[-4, 0, 4]} skinColor="#c68642" shirtColor="#FFD700" pantsColor="#654321" />
       </Canvas>
     </div>
   );

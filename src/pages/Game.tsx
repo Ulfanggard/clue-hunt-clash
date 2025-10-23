@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import ClueBoard from "@/components/game/ClueBoard";
+import GameScene3D from "@/components/game/GameScene3D";
 import ChatPanel from "@/components/game/ChatPanel";
 import ParticipantsList from "@/components/game/ParticipantsList";
 import SolutionPanel from "@/components/game/SolutionPanel";
@@ -135,7 +135,7 @@ const Game = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <ClueBoard
+            <GameScene3D
               clues={gameCase.clues}
               discoveredClues={discoveredClues}
               onDiscoverClue={discoverClue}

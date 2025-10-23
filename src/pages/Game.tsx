@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 import GameScene3D from "@/components/game/GameScene3D";
 import ChatPanel from "@/components/game/ChatPanel";
 import ParticipantsList from "@/components/game/ParticipantsList";
@@ -120,6 +122,32 @@ const Game = () => {
     }
   };
 
+  const handleExitGame = async () => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user || !room) return;
+
+      // Remove user from room participants
+      await supabase
+        .from("room_participants")
+        .delete()
+        .eq("room_id", room.id)
+        .eq("user_id", user.id);
+
+      toast({
+        title: "Left Game",
+        description: "You have exited the game room",
+      });
+
+      navigate("/");
+    } catch (error: any) {
+      console.error("Error exiting game:", error);
+      navigate("/");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-spotlight flex items-center justify-center">
@@ -133,11 +161,22 @@ const Game = () => {
   return (
     <div className="min-h-screen bg-gradient-spotlight">
       <div className="container mx-auto p-4 lg:p-8">
-        <div className="mb-6">
-          <h1 className="text-3xl lg:text-4xl font-bold text-primary mb-2 text-shadow-noir">
-            {gameCase.title}
-          </h1>
-          <p className="text-foreground text-lg">{gameCase.description}</p>
+        <div className="mb-6 flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold text-primary mb-2 text-shadow-noir">
+              {gameCase.title}
+            </h1>
+            <p className="text-foreground text-lg">{gameCase.description}</p>
+          </div>
+          <Button
+            onClick={handleExitGame}
+            variant="destructive"
+            size="lg"
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-5 w-5" />
+            Exit Game
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -6,6 +6,7 @@ import GameScene3D from "@/components/game/GameScene3D";
 import ChatPanel from "@/components/game/ChatPanel";
 import ParticipantsList from "@/components/game/ParticipantsList";
 import SolutionPanel from "@/components/game/SolutionPanel";
+import ClueDialog from "@/components/game/ClueDialog";
 
 interface GameCase {
   id: string;
@@ -24,6 +25,8 @@ const Game = () => {
   const [gameCase, setGameCase] = useState<GameCase | null>(null);
   const [discoveredClues, setDiscoveredClues] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedClue, setSelectedClue] = useState<any>(null);
+  const [isClueDialogOpen, setIsClueDialogOpen] = useState(false);
 
   useEffect(() => {
     loadGameData();
@@ -104,6 +107,10 @@ const Game = () => {
 
       if (error) throw error;
 
+      // Show the clue in a dialog
+      setSelectedClue(gameCase?.clues[clueIndex]);
+      setIsClueDialogOpen(true);
+
       toast({
         title: "Clue Discovered!",
         description: `You found: ${gameCase?.clues[clueIndex].title}`,
@@ -149,6 +156,12 @@ const Game = () => {
           </div>
         </div>
       </div>
+
+      <ClueDialog
+        clue={selectedClue}
+        isOpen={isClueDialogOpen}
+        onClose={() => setIsClueDialogOpen(false)}
+      />
     </div>
   );
 };
